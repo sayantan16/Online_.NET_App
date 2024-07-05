@@ -11,11 +11,17 @@ namespace OnlineApp.Controllers
         {
             _db = db;
         }
+
+        /*Listing Page for Category - get all records*/
+
         public IActionResult Index()
         {
             List<Category> objCategoryList = _db.Categories.ToList();
             return View(objCategoryList);
         }
+
+
+        /*Create action - to create new records of Category type*/
 
         /*Treated as Get action method for create or listing the model value page*/
         public IActionResult Create()
@@ -36,6 +42,10 @@ namespace OnlineApp.Controllers
             {
                 _db.Categories.Add(obj);
                 _db.SaveChanges();
+
+                /*TempData example for success message*/
+                TempData["success"] = "Category Created Successfully!";
+
                 return RedirectToAction("Index");
             }
             else
@@ -44,6 +54,8 @@ namespace OnlineApp.Controllers
             }
         }
 
+
+        /*Edit action - to update existing records of Category type*/
 
         /*Treated as Get action method for Edit to get the details of a Model entry from DB*/
         public IActionResult Edit(int? id)
@@ -77,6 +89,10 @@ namespace OnlineApp.Controllers
             {
                 _db.Categories.Update(obj);
                 _db.SaveChanges();
+                
+                /*TempData example for success message*/
+                TempData["success"] = "Category Updated Successfully!";
+
                 return RedirectToAction("Index");
             }
             else
@@ -84,6 +100,9 @@ namespace OnlineApp.Controllers
                 return View();
             }
         }
+
+
+        /*Delete action - to delete existing records of Category type*/
 
         /*Treated as Get action method for Delete to get the details of a Model entry from DB*/
         public IActionResult Delete(int? id)
@@ -121,6 +140,10 @@ namespace OnlineApp.Controllers
             
             _db.Categories.Remove(categoryObj);
             _db.SaveChanges();
+
+            /*TempData example for success message*/
+            TempData["success"] = "Category Deleted Successfully!";
+
             return RedirectToAction("Index");
         }
     }
