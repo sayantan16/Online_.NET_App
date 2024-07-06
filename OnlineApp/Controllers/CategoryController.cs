@@ -1,22 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineApp.Data;
+using OnlineApp.DataAccess.Data;
+using OnlineApp.DataAccess.Repository.IRepository;
 using OnlineApp.Models;
 
 namespace OnlineApp.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        public CategoryController(ApplicationDbContext db)
+        private readonly ICategoryRepository _categoryRepo;
+        public CategoryController(ICategoryRepository db)
         {
-            _db = db;
+            _categoryRepo = db;
         }
 
         /*Listing Page for Category - get all records*/
 
         public IActionResult Index()
         {
-            List<Category> objCategoryList = _db.Categories.ToList();
+            List<Category> objCategoryList = (List<Category>)_categoryRepo.GetAll();
             return View(objCategoryList);
         }
 
@@ -40,8 +41,8 @@ namespace OnlineApp.Controllers
 
             if(ModelState.IsValid)
             {
-                _db.Categories.Add(obj);
-                _db.SaveChanges();
+                _categoryRepo.Add(obj);
+                _categoryRepo.Save();
 
                 /*TempData example for success message*/
                 TempData["success"] = "Category Created Successfully!";
@@ -69,7 +70,7 @@ namespace OnlineApp.Controllers
             /*Category? objCategory = _db.Categories.Find(id);*/
 
             /*Use of FirstOrDefault method*/
-            Category? objCategory = _db.Categories.FirstOrDefault(c => c.Id == id);
+            Category? objCategory = _categoryRepo.Get(u=>u.Id == id);
 
             /*Use of Where LINQ*/
             /*Category? objCategory = _db.Categories.Where(u=>u.Id == id).FirstOrDefault();*/
@@ -87,8 +88,8 @@ namespace OnlineApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Categories.Update(obj);
-                _db.SaveChanges();
+                _categoryRepo.Update(obj);
+                _categoryRepo.Save();
                 
                 /*TempData example for success message*/
                 TempData["success"] = "Category Updated Successfully!";
@@ -113,7 +114,7 @@ namespace OnlineApp.Controllers
             }
 
             /*Use of Find method*/
-            Category? objCategory = _db.Categories.Find(id);
+            Category? objCategory = _categoryRepo.Get(u=>u.Id == id);
 
             /*Use of FirstOrDefault method*/
             /*Category? objCategory = _db.Categories.FirstOrDefault(c => c.Id == id);*/
@@ -132,14 +133,14 @@ namespace OnlineApp.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {
-            Category? categoryObj = _db.Categories.Find(id);
+            Category? categoryObj = _categoryRepo.Get(u => u.Id == id);
             if (categoryObj == null)
             {
                 return NotFound();
             }
             
-            _db.Categories.Remove(categoryObj);
-            _db.SaveChanges();
+            _categoryRepo.Remove(categoryObj);
+            _categoryRepo.Save();
 
             /*TempData example for success message*/
             TempData["success"] = "Category Deleted Successfully!";

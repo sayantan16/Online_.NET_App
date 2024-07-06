@@ -12,9 +12,9 @@ namespace OnlineApp.Models
         [DisplayName("Category Name")]
         [MaxLength(30)]
         public string Name { get; set; }
-        
+
         [DisplayName("Display Order")]
-        [Range(1, 100, ErrorMessage ="Display Order Number to be between 1 and 100")]
+        [Range(1, 100, ErrorMessage = "Display Order Number to be between 1 and 100")]
         public int DisplayOrder { get; set; }
     }
 }

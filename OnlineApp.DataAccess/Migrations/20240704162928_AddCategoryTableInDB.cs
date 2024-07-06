@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace OnlineApp.Migrations
+namespace OnlineApp.DataAccess.Migrations
 {
     /// <inheritdoc />
     public partial class AddCategoryTableInDB : Migration

@@ -1,11 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using OnlineApp.Data;
+using OnlineApp.DataAccess.Data;
+using OnlineApp.DataAccess.Repository;
+using OnlineApp.DataAccess.Repository.IRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options=> options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 var app = builder.Build();
 

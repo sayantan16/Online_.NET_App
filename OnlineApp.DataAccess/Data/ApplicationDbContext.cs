@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineApp.Models;
 
-namespace OnlineApp.Data
+namespace OnlineApp.DataAccess.Data
 {
     public class ApplicationDbContext: DbContext
     {
