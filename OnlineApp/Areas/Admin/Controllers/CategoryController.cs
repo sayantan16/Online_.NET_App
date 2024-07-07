@@ -3,8 +3,9 @@ using OnlineApp.DataAccess.Data;
 using OnlineApp.DataAccess.Repository.IRepository;
 using OnlineApp.Models;
 
-namespace OnlineApp.Controllers
+namespace OnlineApp.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -34,12 +35,12 @@ namespace OnlineApp.Controllers
         [HttpPost]
         public IActionResult Create(Category obj)
         {
-            if(obj.Name == obj.DisplayOrder.ToString())
+            if (obj.Name == obj.DisplayOrder.ToString())
             {
                 ModelState.AddModelError("Name", "The Display Order and Name cannot match.");
             }
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _unitOfWork.Category.Add(obj);
                 _unitOfWork.Save();
@@ -61,7 +62,7 @@ namespace OnlineApp.Controllers
         /*Treated as Get action method for Edit to get the details of a Model entry from DB*/
         public IActionResult Edit(int? id)
         {
-            if(id == null || id==0)
+            if (id == null || id == 0)
             {
                 return NotFound();
             }
@@ -70,7 +71,7 @@ namespace OnlineApp.Controllers
             /*Category? objCategory = _db.Categories.Find(id);*/
 
             /*Use of FirstOrDefault method*/
-            Category? objCategory = _unitOfWork.Category.Get(u=>u.Id == id);
+            Category? objCategory = _unitOfWork.Category.Get(u => u.Id == id);
 
             /*Use of Where LINQ*/
             /*Category? objCategory = _db.Categories.Where(u=>u.Id == id).FirstOrDefault();*/
@@ -90,7 +91,7 @@ namespace OnlineApp.Controllers
             {
                 _unitOfWork.Category.Update(obj);
                 _unitOfWork.Save();
-                
+
                 /*TempData example for success message*/
                 TempData["success"] = "Category Updated Successfully!";
 
@@ -114,7 +115,7 @@ namespace OnlineApp.Controllers
             }
 
             /*Use of Find method*/
-            Category? objCategory = _unitOfWork.Category.Get(u=>u.Id == id);
+            Category? objCategory = _unitOfWork.Category.Get(u => u.Id == id);
 
             /*Use of FirstOrDefault method*/
             /*Category? objCategory = _db.Categories.FirstOrDefault(c => c.Id == id);*/
