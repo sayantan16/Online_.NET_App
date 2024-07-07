@@ -7,7 +7,7 @@
 namespace OnlineApp.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class SeedCategoryTable : Migration
+    public partial class addCategorySeedData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
