@@ -13,8 +13,5 @@ namespace OnlineApp.DataAccess.Repository.IRepository
     {
         // Update method for Category model
         void Update(Category obj);
-
-        // _db.SaveChanges() related functionality to persist changes done in the Categories table
-        void Save();
     }
 }

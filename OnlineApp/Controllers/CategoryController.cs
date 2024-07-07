@@ -7,17 +7,17 @@ namespace OnlineApp.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ICategoryRepository _categoryRepo;
-        public CategoryController(ICategoryRepository db)
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _categoryRepo = db;
+            _unitOfWork = unitOfWork;
         }
 
         /*Listing Page for Category - get all records*/
 
         public IActionResult Index()
         {
-            List<Category> objCategoryList = (List<Category>)_categoryRepo.GetAll();
+            List<Category> objCategoryList = _unitOfWork.Category.GetAll().ToList();
             return View(objCategoryList);
         }
 
@@ -41,8 +41,8 @@ namespace OnlineApp.Controllers
 
             if(ModelState.IsValid)
             {
-                _categoryRepo.Add(obj);
-                _categoryRepo.Save();
+                _unitOfWork.Category.Add(obj);
+                _unitOfWork.Save();
 
                 /*TempData example for success message*/
                 TempData["success"] = "Category Created Successfully!";
@@ -70,7 +70,7 @@ namespace OnlineApp.Controllers
             /*Category? objCategory = _db.Categories.Find(id);*/
 
             /*Use of FirstOrDefault method*/
-            Category? objCategory = _categoryRepo.Get(u=>u.Id == id);
+            Category? objCategory = _unitOfWork.Category.Get(u=>u.Id == id);
 
             /*Use of Where LINQ*/
             /*Category? objCategory = _db.Categories.Where(u=>u.Id == id).FirstOrDefault();*/
@@ -88,8 +88,8 @@ namespace OnlineApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _categoryRepo.Update(obj);
-                _categoryRepo.Save();
+                _unitOfWork.Category.Update(obj);
+                _unitOfWork.Save();
                 
                 /*TempData example for success message*/
                 TempData["success"] = "Category Updated Successfully!";
@@ -114,7 +114,7 @@ namespace OnlineApp.Controllers
             }
 
             /*Use of Find method*/
-            Category? objCategory = _categoryRepo.Get(u=>u.Id == id);
+            Category? objCategory = _unitOfWork.Category.Get(u=>u.Id == id);
 
             /*Use of FirstOrDefault method*/
             /*Category? objCategory = _db.Categories.FirstOrDefault(c => c.Id == id);*/
@@ -133,14 +133,14 @@ namespace OnlineApp.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {
-            Category? categoryObj = _categoryRepo.Get(u => u.Id == id);
+            Category? categoryObj = _unitOfWork.Category.Get(u => u.Id == id);
             if (categoryObj == null)
             {
                 return NotFound();
             }
-            
-            _categoryRepo.Remove(categoryObj);
-            _categoryRepo.Save();
+
+            _unitOfWork.Category.Remove(categoryObj);
+            _unitOfWork.Save();
 
             /*TempData example for success message*/
             TempData["success"] = "Category Deleted Successfully!";
