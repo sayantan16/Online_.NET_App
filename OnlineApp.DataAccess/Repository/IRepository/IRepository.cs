@@ -12,11 +12,11 @@ namespace OnlineApp.DataAccess.Repository.IRepository
         // T - Category
 
         // To get all elements of the class for listing
-        IEnumerable<T> GetAll();
+        IEnumerable<T> GetAll(string? includeProperties = null);
 
         // To get single value based on id or any element, it will return first or default
         // The param is example how LINQ value is passed as generic param
-        T Get(Expression<Func<T, bool>> filter);
+        T Get(Expression<Func<T, bool>> filter, string? includeProperties = null);
 
         // Adding an entity to the db for the class T
         void Add(T entity);

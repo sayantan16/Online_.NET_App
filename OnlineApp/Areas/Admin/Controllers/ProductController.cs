@@ -10,16 +10,19 @@ namespace OnlineApp.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductController(IUnitOfWork unitOfWork)
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // Get all values in Product table from DB
         public IActionResult Index()
         {
-            List<Product> objProductList = _unitOfWork.Product.GetAll().ToList();
+            // the name inside the includeProperties should match with the actual field name given in the Model - Product
+            List<Product> objProductList = _unitOfWork.Product.GetAll(includeProperties:"Category").ToList();
             return View(objProductList);
         }
 
@@ -143,7 +146,43 @@ namespace OnlineApp.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.Product.Add(obj.Product);
+                // handling of saving file in wwwRoot folder - images\product and setting the path in ImageURL of Product Model
+                
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = Path.Combine(wwwRootPath, @"images\product");
+
+                    if(!string.IsNullOrEmpty(obj.Product.ImageUrl))
+                    {
+                        // delete old image
+                        var oldImagePath = Path.Combine(wwwRootPath, obj.Product.ImageUrl.TrimStart('\\'));
+
+                        if(System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
+                    using( var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create) )
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+                    obj.Product.ImageUrl = @"\images\product\" + fileName;
+                }
+
+                // if id is not present then it is Add
+                if (obj.Product.Id == 0 || obj.Product.Id == null)
+                {
+                    _unitOfWork.Product.Add(obj.Product);
+                }
+                // if id is present while submitting, then it is Update
+                else
+                {
+                    _unitOfWork.Product.Update(obj.Product);
+                }
                 _unitOfWork.Save();
 
                 TempData["success"] = "Product Created Successfully!";
@@ -228,7 +267,13 @@ namespace OnlineApp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            string wwwRootPath = _webHostEnvironment.WebRootPath;
+            var oldImagePath = Path.Combine(wwwRootPath, productObj.ImageUrl.TrimStart('\\'));
 
+            if (System.IO.File.Exists(oldImagePath))
+            {
+                System.IO.File.Delete(oldImagePath);
+            }
             _unitOfWork.Product.Remove(productObj);
             _unitOfWork.Save();
 
@@ -236,5 +281,21 @@ namespace OnlineApp.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
+
+
+
+        // creating an API for getall function which sends the JSON object with all data
+        // accessible under URI/admin/product/getall
+        #region API CALLS
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            List<Product> objProductList = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
+            return Json( new { data = objProductList });
+        }
+
+        #endregion
+
     }
 }

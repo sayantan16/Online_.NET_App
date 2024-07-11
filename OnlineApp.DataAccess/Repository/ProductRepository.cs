@@ -19,7 +19,27 @@ namespace OnlineApp.DataAccess.Repository
 
         public void Update(Product obj)
         {
-            _db.Products.Update(obj);
+            var objFromDb = _db.Products.FirstOrDefault(c => c.Id == obj.Id);
+            if (objFromDb != null)
+            {
+                objFromDb.Title = obj.Title;
+                objFromDb.Description = obj.Description;
+                objFromDb.ISBN = obj.ISBN;
+                objFromDb.Price = obj.Price;
+                objFromDb.ListPrice = obj.ListPrice;
+                objFromDb.Price50 = obj.Price50;
+                objFromDb.Price100 = obj.Price100;
+                objFromDb.Author = obj.Author;
+                objFromDb.CategoryId = obj.CategoryId;
+                
+                // TO make sure that imageURL doesn't get updated with null by mistake
+                if (obj.ImageUrl != null)
+                {
+                    objFromDb.ImageUrl = obj.ImageUrl;
+                }
+            }
+            // will not be required if we do manual update like above
+            /*_db.Products.Update(obj);*/
         }
     }
 }

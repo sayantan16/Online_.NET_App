@@ -20,6 +20,12 @@ namespace OnlineApp.DataAccess.Repository
         {
             _db = db;
             this.dbSet = _db.Set<T>();
+
+            // we can include the details of Category table entry using CategoryId as FK in Products table
+            _db.Products.Include(u => u.Category);
+
+            // we can include the details of Category table and other tables as well using CategoryId and other Ids as FK in Products table
+            /*_db.Products.Include(u => u.Category).Include(u=> u.Customer)...;*/
         }
         public void Add(T entity)
         {
@@ -27,7 +33,7 @@ namespace OnlineApp.DataAccess.Repository
             dbSet.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter)
+        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
         {
             // query holds all values from DB for class T
             IQueryable<T> query = dbSet;
@@ -35,14 +41,34 @@ namespace OnlineApp.DataAccess.Repository
             // on the query object filter is applied as a LINQ query
             query = query.Where(filter);
 
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                // handling multiple or single properties as include - this is being dynamic
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
+
             // the first of default value from the filtered query is returned
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll()
+        // considering that we will recieve either single include model - Category or multiple models as CSV value - Category,Customer,Transaction
+        public IEnumerable<T> GetAll(string? includeProperties = null)
         {
             // Returning the whole list of values from the DB as query holds all values from DB for class T
             IQueryable<T> query = dbSet;
+
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                // handling multiple or single properties as include - this is being dynamic
+                foreach(var includeProp in includeProperties.Split(new char[] { ','}, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
+
             return query.ToList();
         }
 
