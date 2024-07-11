@@ -15,6 +15,9 @@ namespace OnlineApp.DataAccess.Repository.IRepository
         // all repos of Product Model
         IProductRepository Product { get; }
 
+        // all repos of Company Model
+        ICompanyRepository Company { get; }
+
         // saving all repo changes as a single unit/batch
         void Save();
     }

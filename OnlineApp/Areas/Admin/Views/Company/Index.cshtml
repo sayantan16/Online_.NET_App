@@ -1,0 +1,105 @@
+﻿@model List<Company>
+
+
+@{
+    ViewData["Title"] = "Company List";
+}
+
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient m-lg-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Company List</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <div class="row pb-3">
+            <div class="col-6">
+                @* <h2 class="text-light">Product List</h2> *@
+            </div>
+            <div class="col-6 text-end">
+
+                @* Only for create action *@
+                @* <a asp-controller="Product" asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-square"></i> <span>Create New Product</span>
+                </a> *@
+
+                @* For upsert action *@
+                <a asp-controller="Company" asp-action="Upsert" class="btn btn-primary">
+                    <i class="bi bi-plus-square"></i> <span>Create New Company</span>
+                </a>
+            </div>
+        </div>
+        <table class="table table-bordered table-striped table-hover">
+
+            <thead class="table-light text-center">
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        StreetAddress
+                    </th>
+                    <th>
+                        City
+                    </th>
+                    <th>
+                        State
+                    </th>
+                    <th>
+                        PostalCode
+                    </th>
+                    <th>
+                        PhoneNumber
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OrderBy(u => u.Id))
+                {
+                    <tr>
+                        <td>
+                            @item.Name
+                        </td>
+                        <td>
+                            @item.StreetAddress
+                        </td>
+                        <td>
+                            @item.City
+                        </td>
+                        <td>
+                            @item.State
+                        </td>
+                        <td>
+                            @item.PostalCode
+                        </td>
+                        <td>
+                            @item.PhoneNumber
+                        </td>
+                        <td>
+                            <div class="w-75 btn-group" role="group">
+
+                                @* Only for Edit action *@
+                                @* <a asp-controller="Product" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary mx-2">
+                            <i class="bi bi-pencil-square"></i> Edit
+                            </a> *@
+
+                                @* For upsert action *@
+                                <a asp-controller="Company" asp-action="Upsert" asp-route-id="@item.Id" class="btn btn-primary mx-2">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+
+                                <a asp-controller="Company" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger mx-2">
+                                    <i class="bi bi-trash3-fill"></i> Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+</div>

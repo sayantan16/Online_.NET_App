@@ -1,7 +1,7 @@
 ﻿@model Company
 
 @{
-    ViewData["Title"] = "Delete Company";
+    ViewData["Title"] = "Create/Edit Product";
 }
 
 
@@ -9,14 +9,13 @@
     <div class="card-header bg-secondary bg-gradient m-lg-0 py-3">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="text-warning py-2">Delete Company</h2>
+                <h2 class="text-white py-2">@(Model.Id!=0?"Update":"Create") Company</h2>
             </div>
         </div>
     </div>
     <div class="card-body p-4">
 
-        <form method="post">
-            @* Must Keep this line if we use anything other than name = (Id) as PK, its safe to keep this line *@
+        <form method="post" enctype="multipart/form-data">
             <input asp-for="Id" hidden />
             <div class="border p-3 mtg-4">
                 @* <div class="row pb-2">
@@ -30,39 +29,52 @@
                 <div class="mb-3 row p-1">
                     <div class="col-6">
                         <label asp-for="Name" class="p-0"></label>
-                        <input asp-for="Name" class="form-control" disabled />
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="col-6">
                         <label asp-for="StreetAddress" class="p-0"></label>
-                        <input asp-for="StreetAddress" class="form-control" disabled />
+                        <textarea asp-for="StreetAddress" class="form-control"></textarea>
+                        <span asp-validation-for="StreetAddress" class="text-danger"></span>
                     </div>
                 </div>
 
                 <div class="mb-3 row p-1">
                     <div class="col-6">
                         <label asp-for="City" class="p-0"></label>
-                        <input asp-for="City" class="form-control" disabled />
+                        <input asp-for="City" class="form-control" />
+                        <span asp-validation-for="City" class="text-danger"></span>
                     </div>
                     <div class="col-6">
                         <label asp-for="State" class="p-0"></label>
-                        <input asp-for="State" class="form-control" disabled />
+                        <input asp-for="State" class="form-control" />
+                        <span asp-validation-for="State" class="text-danger"></span>
                     </div>
                 </div>
 
                 <div class="mb-3 row p-1">
                     <div class="col-6">
                         <label asp-for="PostalCode" class="p-0"></label>
-                        <input asp-for="PostalCode" class="form-control" disabled />
+                        <input asp-for="PostalCode" class="form-control" />
+                        <span asp-validation-for="PostalCode" class="text-danger"></span>
                     </div>
                     <div class="col-6">
                         <label asp-for="PhoneNumber" class="p-0"></label>
-                        <input asp-for="PhoneNumber" class="form-control" disabled />
+                        <input asp-for="PhoneNumber" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-6">
-                        <button type="submit" class="btn btn-danger form-control">Delete Record</button>
+                        @if(Model.Id != 0 )
+                        {
+                            <button type="submit" class="btn btn-primary form-control">Update</button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-primary form-control">Create</button>
+                        }
                     </div>
                     <div class="col-6">
                         <a asp-controller="Company" asp-action="Index" class="btn btn-outline-secondary border form-control">Back to List</a>

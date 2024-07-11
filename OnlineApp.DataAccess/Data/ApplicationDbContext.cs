@@ -14,6 +14,8 @@ namespace OnlineApp.DataAccess.Data
 
         public DbSet<Product> Products { get; set; }
 
+        public DbSet<Company> Companies { get; set; }
+
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,6 +28,7 @@ namespace OnlineApp.DataAccess.Data
                 new Category { Id = 2, Name = "SciFi", DisplayOrder = 2 },
                 new Category { Id = 3, Name = "History", DisplayOrder = 3 }
                 );
+
 
             modelBuilder.Entity<Product>().HasData(
                 new Product
