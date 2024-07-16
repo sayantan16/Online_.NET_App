@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineApp.DataAccess.Data;
 
@@ -11,9 +12,11 @@ using OnlineApp.DataAccess.Data;
 namespace OnlineApp.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240716154618_AddingForeignKeyCompanyToUser")]
+    partial class AddingForeignKeyCompanyToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -305,38 +308,6 @@ namespace OnlineApp.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Companies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            City = "Philadelphia",
-                            Name = "Tech Solution",
-                            PhoneNumber = "3434343434",
-                            PostalCode = "18121",
-                            State = "Pennsylvania",
-                            StreetAddress = "31 N 15th Street"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            City = "New York",
-                            Name = "Vivid Books",
-                            PhoneNumber = "1212121212",
-                            PostalCode = "18231",
-                            State = "New York",
-                            StreetAddress = "33 N 11th Ave"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            City = "Wilmington",
-                            Name = "Readers Club",
-                            PhoneNumber = "4545454544",
-                            PostalCode = "34231",
-                            State = "Delware",
-                            StreetAddress = "12 N 11th Market"
-                        });
                 });
 
             modelBuilder.Entity("OnlineApp.Models.Product", b =>

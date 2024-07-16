@@ -116,7 +116,38 @@ namespace OnlineApp.DataAccess.Data
                     ImageUrl = ""
                 }
                 );
-        
+
+            modelBuilder.Entity<Company>().HasData(
+                new Company {
+                    Id = 1,
+                    Name = "Tech Solution",
+                    StreetAddress = "31 N 15th Street",
+                    City = "Philadelphia",
+                    State = "Pennsylvania",
+                    PostalCode = "18121",
+                    PhoneNumber = "3434343434"
+                },
+                new Company
+                {
+                    Id = 2,
+                    Name = "Vivid Books",
+                    StreetAddress = "33 N 11th Ave",
+                    City = "New York",
+                    State = "New York",
+                    PostalCode = "18231",
+                    PhoneNumber = "1212121212"
+                },
+                new Company
+                {
+                    Id = 3,
+                    Name = "Readers Club",
+                    StreetAddress = "12 N 11th Market",
+                    City = "Wilmington",
+                    State = "Delware",
+                    PostalCode = "34231",
+                    PhoneNumber = "4545454544"
+                }
+                );
         }
     }
 }
