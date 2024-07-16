@@ -119,6 +119,7 @@ namespace OnlineApp.DataAccess.Data
                 }
                 );
 
+
             modelBuilder.Entity<Company>().HasData(
                 new Company {
                     Id = 1,
@@ -150,6 +151,12 @@ namespace OnlineApp.DataAccess.Data
                     PhoneNumber = "4545454544"
                 }
                 );
+
+          
+            modelBuilder.Entity<ShoppingCart>()
+                .Property(s => s.Id)
+                .ValueGeneratedOnAdd(); // Ensure the Id is auto-generated
+        
         }
     }
 }

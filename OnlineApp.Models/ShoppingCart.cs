@@ -11,6 +11,7 @@ namespace OnlineApp.Models
 {
     public class ShoppingCart
     {
+        [Key]
         public int Id { get; set; }
 
         public int ProductId { get; set; }
@@ -27,5 +28,8 @@ namespace OnlineApp.Models
         [ForeignKey("ApplicationUserId")]
         [ValidateNever]
         public ApplicationUser ApplicationUser { get; set; }
+
+        [NotMapped]
+        public double Price { get; set; }
     }
 }

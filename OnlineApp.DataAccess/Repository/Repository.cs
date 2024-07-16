@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OnlineApp.DataAccess.Data;
 using OnlineApp.DataAccess.Repository.IRepository;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace OnlineApp.DataAccess.Repository
 {
@@ -33,10 +34,20 @@ namespace OnlineApp.DataAccess.Repository
             dbSet.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
+        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
         {
-            // query holds all values from DB for class T
-            IQueryable<T> query = dbSet;
+            IQueryable<T> query;
+            
+            if (tracked)
+            {
+                // query holds all values from DB for class T
+                query = dbSet;
+            }
+            else
+            {
+                // query holds all values from DB for class T
+                query = dbSet.AsNoTracking();
+            }
 
             // on the query object filter is applied as a LINQ query
             query = query.Where(filter);
@@ -52,13 +63,20 @@ namespace OnlineApp.DataAccess.Repository
 
             // the first of default value from the filtered query is returned
             return query.FirstOrDefault();
+
         }
 
         // considering that we will recieve either single include model - Category or multiple models as CSV value - Category,Customer,Transaction
-        public IEnumerable<T> GetAll(string? includeProperties = null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter, string? includeProperties = null)
         {
             // Returning the whole list of values from the DB as query holds all values from DB for class T
             IQueryable<T> query = dbSet;
+
+            // on the query object filter is applied as a LINQ query
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
 
             if (!string.IsNullOrEmpty(includeProperties))
             {
