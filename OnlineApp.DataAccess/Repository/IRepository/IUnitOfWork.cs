@@ -18,6 +18,10 @@ namespace OnlineApp.DataAccess.Repository.IRepository
         // all repos of Company Model
         ICompanyRepository Company { get; }
 
+        IShoppingCartRepository ShoppingCart { get; }
+
+        IApplicationUserRepository ApplicationUser { get; }
+
         // saving all repo changes as a single unit/batch
         void Save();
     }
