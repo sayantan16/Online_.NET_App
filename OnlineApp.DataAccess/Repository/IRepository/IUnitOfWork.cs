@@ -22,6 +22,10 @@ namespace OnlineApp.DataAccess.Repository.IRepository
 
         IApplicationUserRepository ApplicationUser { get; }
 
+        IOrderHeaderRepository OrderHeader { get; }
+
+        IOrderDetailRepository OrderDetail { get; }
+
         // saving all repo changes as a single unit/batch
         void Save();
     }
