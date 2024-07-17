@@ -11,5 +11,11 @@ namespace OnlineApp.DataAccess.Repository.IRepository
     {
         // Update method for Order Header model
         void Update(OrderHeader obj);
+
+        // based on id, we want to only update order status or payment status
+        void UpdateStatus(int id, string orderStatus, string? paymentStatus = null);
+
+        // based on order header id, updating the session and payment id for stripe payments
+        void UpdateStripePaymentID(int id, string sessionId, string paymentIntentId);
     }
 }
